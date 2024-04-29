@@ -43,11 +43,19 @@ class DataPacketFrame:
         self.ctr_Code = 0  
         self.DataLen = 0  
         self.Data = bytearray(MID_LEN)  
-        self.CheckSum = 0  
+        self.CheckSum = 0
+
+def print_data(data, prefix=None):
+    if prefix:
+        print(prefix, end=' ')
+    for byte in data:
+        print('{:02X}'.format(byte), end=' ')
+    print()  # 换行          
 def print_bytearray_hex(buf, prefix=''):
-    
-    port = get_file_name_no_extension() 
-    port += ".log" 
+    port = "D:\\COM.log" 
+    prefix += '['
+    prefix += get_file_name_no_extension()
+    prefix += ']'
 
     # 打开文件，准备追加写入
     with open(port, 'a') as f:
@@ -56,21 +64,14 @@ def print_bytearray_hex(buf, prefix=''):
         # 设置标准输出到文件中
         sys.stdout = f
         
-        # 在终端中打印数据
-        if prefix:
-            print(prefix, end=' ')  # 输出到终端
-        for byte in buf:
-            print('{:02X}'.format(byte), end='')  
-        print() # 换行      
+        # 在文件中打印数据
+        print_data(buf, prefix)
+
         # 恢复原始stdout
         sys.stdout = original_stdout
 
-        # 终端中输出数据
-        if prefix:
-            print(prefix, end=' ')  # 输出到终端
-        for byte in buf:
-            print('{:02X}'.format(byte), end='')  
-        print() # 换行    
+    # 终端中输出数据
+    print_data(buf, prefix)
 
 def calculate_checksum(data):  
     """  
