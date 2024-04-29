@@ -6,7 +6,7 @@ start python D:\Pro\python_workspace\testSerial.py
 :: 设置可变的 EXE_NAME
 set "EXE_NAME_VAR=COM"
 
-:: 可选取值 4、6、8、10
+:: 可选取值 4 6 8 10 12 14 16 18
 set "PATHS=4 6 8 10 12 14 16 18"
 
 for %%p in (%PATHS%) do (

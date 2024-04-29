@@ -1,7 +1,7 @@
 @echo off
 
 rem 设置需要生成的编号数组 4 6 8 10 12 14 16 18
-set nums=4 6 8 10 12 14 16 18
+set nums=4 6 8 10 12 14 16 18 
 
 rem 遍历编号数组
 for %%i in (%nums%) do (

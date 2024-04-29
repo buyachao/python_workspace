@@ -1,3 +1,4 @@
+import datetime
 import sys
 import time
 import serial
@@ -53,9 +54,11 @@ def print_data(data, prefix=None):
     print()  # 换行          
 def print_bytearray_hex(buf, prefix=''):
     port = "D:\\COM.log" 
-    prefix += '['
-    prefix += get_file_name_no_extension()
-    prefix += ']'
+
+    # 获取当前时间并格式化为 yyMMddhh:mm:ss
+    current_time = datetime.datetime.now().strftime('%y-%m-%d %H:%M:%S')
+    
+    prefix = f'{current_time} ' + '[' + get_file_name_no_extension() + '-' + prefix + ']：' 
 
     # 打开文件，准备追加写入
     with open(port, 'a') as f:
@@ -70,8 +73,8 @@ def print_bytearray_hex(buf, prefix=''):
         # 恢复原始stdout
         sys.stdout = original_stdout
 
-    # 终端中输出数据
-    print_data(buf, prefix)
+    # 终端中输出数据（一直输出会占用内存）
+    # print_data(buf, prefix)
 
 def calculate_checksum(data):  
     """  
@@ -206,7 +209,7 @@ def serial_communication_loop(serial_port, baudrate, outBuf: bytearray) -> tuple
                 data = ser.read(ser.in_waiting)    
                 received_length = len(data)  
                 #print(f"实际收到的字节数: {received_length}")
-                print_bytearray_hex(data, "接收数据：") 
+                print_bytearray_hex(data, "接收数据") 
 
                 readBuff = DataPacketFrame()  
                 success = UnPacket(data, readBuff)  
@@ -302,7 +305,7 @@ if __name__ == "__main__":
         dataInfo.Data[:] = out_data[:]
 
         len_out = packet(dataInfo, out_buf) 
-        print_bytearray_hex(out_buf[:len_out], "发送数据：")
+        print_bytearray_hex(out_buf[:len_out], "发送数据")
        
         # 创建一个长度为 len_out 的空 bytearray  
         out_realdata = bytearray(len_out)  
